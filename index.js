@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.static(__dirname + '/public'))
 const http = require('http')
 const config = require('./config.json')
 const fetch = require('node-fetch')
@@ -35,18 +36,8 @@ app.get(prefix+':url/', (req, res) => {
     console.log(url)
     fetch(url)
     .then(res => res.text())
-    .then(body => res.send(body += "<script src='https://7b6b187c-af91-48b7-84bc-dae872584e4a.id.repl.co/inject' type='text/javascript'></script>"))
+    .then(body => res.send(body += "<script src='https://7b6b187c-af91-48b7-84bc-dae872584e4a.id.repl.co/assets/inject.js' type='text/javascript'></script>"))
 })
 
-
-
-app.get('/main', (req, res) => {
-  res.sendFile('main.js', {root: __dirname + "/assets"})
-})
-
-app.get('/inject', (req, res) => {
-  res.sendFile('inject.js', {root: __dirname + "/assets"})
-})
-
-server.listen(config.port)
-console.log(`https://localhost:${config.port}`)
+server.listen(process.env.PORT || config.port)
+console.log(`https://localhost:${process.env.PORT || config.port}`)
